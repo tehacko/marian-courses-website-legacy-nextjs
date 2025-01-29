@@ -4,9 +4,9 @@ import styles from "../app/page.module.css"; // Adjust the path to match your fo
 export default function Footer() {
   return (
     <footer>
-      <a>
-        Go to nextjs.org →
-      </a>
+      <p className="copyright-information">
+          Copyright © 2025 by Marian Courses
+        </p>
     </footer>
   );
 }

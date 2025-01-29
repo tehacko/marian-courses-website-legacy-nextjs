@@ -1,0 +1,63 @@
+#events {
+  margin-bottom: 1.5rem;
+  padding: 0rem;
+  overflow: auto; /* Ensures the container respects its children's height */
+  box-sizing: border-box; /* Ensure padding doesn't affect the overall width */
+}
+
+#events h2 {
+  font-size: 1.5rem; /* Larger heading for the section */
+  margin: 0; /* Remove default margin */
+}
+
+#events ul {
+    display: flex;           /* Arrange items in a row */
+    gap: 1rem;               /* Add spacing between items */
+    padding: 0;              /* Remove default padding */
+    list-style: none;        /* Remove bullets */
+    justify-content: center; /* Center the items horizontally */
+  }
+  
+#events li {
+flex: 1 1 calc(33.333% - 1rem); /* Three items per row with gap consideration */
+max-width: calc(33.333% - 1rem); /* Prevent items from stretching too far */
+display: flex;           /* Flex layout inside each item */
+flex-direction: column;  /* Stack content vertically */
+align-items: center;     /* Center align text and image */
+text-align: center;      /* Center text alignment */
+background: #f8f8f8;     /* Optional: Add a light background for visibility */
+border: 1px solid #ddd;  /* Optional: Add a border */
+padding: 1rem;           /* Add some spacing inside the item */
+box-sizing: border-box;  /* Ensure padding doesn't affect sizing */
+}
+
+.medallion-image {
+width: 60%;             /* Make the image fill the li item width */
+height: auto;            /* Maintain aspect ratio */
+max-width: 100px;       /* Set a maximum width for the image */
+display: block;         /* Ensure the image behaves as a block-level element */
+margin: 0 auto;         /* Center the image horizontally */
+border-radius: 8px;     /* Optional: Add rounded corners */
+max-width: 80%;         /* Ensure images stay within bounds */
+}
+
+#events li h2 {
+  font-size: clamp(1.3rem, 2.5vw, 2rem); /* Slightly larger for headings */
+}
+
+#events li p {
+  font-size: clamp(1.3rem, 2vw, 1rem); /* Slightly smaller for descriptions */
+}
+
+
+@media (max-width: 768px) {
+  .medallion-image {
+    width: 60%; /* Shrink the image further for smaller screens */
+  }
+  #events li h2 {
+    font-size: 1rem; /* Smaller heading for narrow screens */
+  }
+  #events li p {
+    font-size: 0.8rem; /* Smaller text for narrow screens */
+  }
+}

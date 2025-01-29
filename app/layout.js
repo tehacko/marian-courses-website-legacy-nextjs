@@ -1,6 +1,19 @@
-import "../styles/globals.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import "@/styles/globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+export const metadata = {
+  title: 'Marian Courses Website',
+  description: 'Learn about the courses offered by Maria',
+};
+
+// export const user = {
+//   username: '',
+//   email: '',
+//   password: '',
+//   registered: false,
+//   loggedIn: false,
+// };
 
 export default function RootLayout({ children }) {
   return (
@@ -10,7 +23,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Header />
-        <main>{children}</main>
+        <main>
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
