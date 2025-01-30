@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import MainHeader from "@/components/MainHeader/MainHeader";
-import Footer from "@/components/Footer";
+import MainFooter from "@/components/MainFooter/MainFooter";
 
 export const metadata = {
   title: 'Marian Courses Website',
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <main>
           {children}
         </main>
-        <Footer />
+        <MainFooter />
       </body>
     </html>
   );

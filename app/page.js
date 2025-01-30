@@ -1,13 +1,13 @@
-import styles from "./page.module.css";
 import Link from "next/link";
 import classes from "./page.module.css";
+import ImageSlideshow from "@/components/Images/ImageSlides";
 
 export default function Home() {
   return (
     <>
       <header className={classes.header}>
         <div className={classes.slideshow}>
-
+          <ImageSlideshow />
         </div>
         <div className={classes.hero}>
           <h1>Vítejte na portálu kurzů Marie!!</h1>
