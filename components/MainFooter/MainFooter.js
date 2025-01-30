@@ -6,7 +6,7 @@ export default function MainFooter() {
     <footer className={styles.footer}>
       <p>
           Copyright © 2025 by Marian Courses
-        </p>
+      </p>
     </footer>
   );
 }
