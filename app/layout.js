@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import Header from "@/components/Header";
+import MainHeader from "@/components/MainHeader/MainHeader";
 import Footer from "@/components/Footer";
 
 export const metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
         {/* Add any custom head elements here */}
       </head>
       <body>
-        <Header />
+        <MainHeader />
         <main>
           {children}
         </main>
