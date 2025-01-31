@@ -2,10 +2,10 @@ import React from 'react';
 
 const NotFound = () => {
     return (
-        <div>
-            <h1>404 - Page Not Found</h1>
-            <p>Sorry, the page you are looking for does not exist. Yo.</p>
-        </div>
+        <main className='not-found'>
+            <h1>Stránka nenalezena.</h1>
+            <p>Stránka pravděpodobně neexistuje. Jste si jistí, že jste zadali adresu správně?</p>
+        </main>
     );
 };
 
