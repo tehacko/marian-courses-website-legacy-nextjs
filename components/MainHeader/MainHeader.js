@@ -13,10 +13,11 @@ export default function MainHeader() {
           <Image src={MariaPicture} className={classes.logo} alt='Website logo' priority />
           <nav className={classes.nav}>
             <ClientNavLink href="/">Home</ClientNavLink>
-            <ClientNavLink href="/about">About</ClientNavLink>
-            <ClientNavLink href="/courses">Courses</ClientNavLink>
-            <ClientNavLink href="/login">Login</ClientNavLink>
-            <ClientNavLink href="/register">Register</ClientNavLink>
+            <ClientNavLink href="/about">O nás</ClientNavLink>
+            <ClientNavLink href="/courses">Kurzy</ClientNavLink>
+            <ClientNavLink href="/create-a-course">Vytvořit kurz</ClientNavLink>
+            <ClientNavLink href="/login">Přihlášení</ClientNavLink>
+            <ClientNavLink href="/register">Registrace</ClientNavLink>
           </nav>
         </div>
       </header>

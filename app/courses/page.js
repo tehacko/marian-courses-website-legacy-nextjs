@@ -1,6 +1,7 @@
 import Link from "next/link";
 import classes from "./page.module.css";
 import CoursesGrid from "@/components/Courses/CoursesGrid";
+
 import { getCourses } from '@/lib/Courses';
 import { Suspense } from "react";
 
@@ -28,13 +29,13 @@ export default async function CoursesPage(){
                 <Suspense fallback={<p className={classes.loading}>Loading...</p>}>
                     <LoadingCourses />
                 </Suspense>
-                <h1>Courses Calendar</h1>
+                {/* <h1>Courses Calendar</h1>
                 <p>
                     <Link href="/courses/course-1" className="hover:underline">Course 1</Link>
                 </p>
                 <p>
                     <Link href="/courses/course-2" className="hover:underline">Course 2</Link>
-                </p>
+                </p> */}
         </main>
         </>
     );

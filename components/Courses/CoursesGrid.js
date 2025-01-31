@@ -5,7 +5,7 @@ export default function CoursesGrid({ courses }) {
     return (
         <ul className={classes.courses}>
             {courses.map(course => (
-                <li key={course.id ?? Math.random().toString()}>
+                <li key={course.id}>
                     <CourseItem {...course} />
                 </li>
             ))}

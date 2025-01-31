@@ -10,7 +10,7 @@ export default function CourseItem({ title, slug, image, summary, lecturer }) {
           <div className={classes.image}>
             <Image
               src={`/${image}`}
-              alt='a beautiful image' //{title}
+              alt={title}
               fill
             />
           </div>

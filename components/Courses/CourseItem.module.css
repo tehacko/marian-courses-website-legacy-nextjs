@@ -46,11 +46,17 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  /* text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif; */
 }
 
 .summary {
   padding: 1rem 1rem 0 1rem;
 }
+
+/* .summary p {
+  background-color: white;
+} */
 
 .actions {
   padding: 1rem;
