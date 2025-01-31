@@ -1,8 +1,11 @@
 import Link from "next/link";
 import classes from "./page.module.css";
 import CoursesGrid from "@/components/Courses/CoursesGrid";
+import { getCourses } from '@/lib/Courses';
 
-export default function CoursesPage(){
+export default async function CoursesPage(){
+    const courses = await getCourses();
+
     return (
         <>
             <header className={classes.header}>
@@ -17,7 +20,7 @@ export default function CoursesPage(){
                 </p>
             </header>
             <main className={classes.main}>
-                <CoursesGrid courses={[]}/>
+                <CoursesGrid courses={courses}/>
                 <h1>Courses Calendar</h1>
                 <p>
                     <Link href="/courses/course-1" className="hover:underline">Course 1</Link>

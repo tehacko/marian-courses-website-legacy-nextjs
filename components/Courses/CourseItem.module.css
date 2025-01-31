@@ -1,4 +1,4 @@
-.meal {
+.course {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -27,17 +27,17 @@
   font-style: italic;
 }
 
-.meal h2,
-.meal p {
+.course h2,
+.course p {
   margin: 0;
 }
 
 .image {
   position: relative;
-  height: 15rem;
+  height: 28rem;
 }
 
-.meal img {
+.course img {
   object-fit: cover;
 }
 

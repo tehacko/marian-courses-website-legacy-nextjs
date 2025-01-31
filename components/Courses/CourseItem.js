@@ -9,8 +9,8 @@ export default function CourseItem({ title, slug, image, summary, lecturer }) {
         <header>
           <div className={classes.image}>
             <Image
-              src={`https://maxschwarzmueller-nextjs-demo-users-image.s3.amazonaws.com/${image}`}
-              alt={title}
+              src={`/${image}`}
+              alt='a beautiful image' //{title}
               fill
             />
           </div>
@@ -22,7 +22,7 @@ export default function CourseItem({ title, slug, image, summary, lecturer }) {
         <div className={classes.content}>
           <p className={classes.summary}>{summary}</p>
           <div className={classes.actions}>
-            <Link href={`/courses/${slug}`}>View Details</Link>
+            <Link href={`/courses/${slug}`}>Více informací</Link>
           </div>
         </div>
       </article>
