@@ -53,7 +53,7 @@ export default function CreateACourse() {
             </p>
             <ImagePicker />
             <p className={classes.actions}>
-                <button type="submit">Share Meal</button>
+                <button type="submit">Vytvořit kurz</button>
             </p>
             </form>
         </main>
