@@ -32,7 +32,7 @@ const dummyCourses = [
      slug: 'zoltan-webi1',
      image: 'zoltan-zdravozivotnestylovy.png',
      summary:
-       "Představujeme nejnovější a nejefektivnější metodu zdravého stravování",
+       "Představujeme nejnovější a nejefektivnější metodu zdravého stravování.",
      course_description: `
        1. Zásady zdravého životního stylu:
           Jak správně nastavit každodenní režim pro dlouhodobé zdraví.
@@ -80,9 +80,9 @@ const dummyCourses = [
    {
      title: 'Workshop líčení s novým revolučním nástrojem Make-U-Up',
      slug: 'valerie-webi1',
-     image: 'makeup-workshop.png',
+     image: 'valerie-vynalezava.png',
      summary:
-       "Buďte mezi tisícemi žen, které využívají revoluční metody líčení s Make-U-Up", 
+       "Buďte mezi tisícemi žen, které využívají revoluční metody líčení s Make-U-Up.", 
      course_description: `
        1. Úvod do moderního líčení:
           Jaké jsou nejnovější trendy a technologie v kosmetice.
@@ -103,9 +103,9 @@ const dummyCourses = [
      lecturer_email: 'vevycko@example.com',
    },
    {
-     title: 'Smart-Greenery: Software k údržbě a zalévání květin',
+     title: 'Smart-Greenery: Software k údržbě a zalévání květin.',
      slug: 'barbora-vide1',
-     image: 'smart-greenery.png',
+     image: 'barbora-botanickozkoumava.png',
      summary:
        'Zjednodušte si údržbu zeleně v domácnosti a na zahradě automatizovaným nástrojem Smart-Greenery.',
      course_description: `

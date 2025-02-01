@@ -1,10 +1,14 @@
-// 'use client';
+'use client';
+
 // import { useState } from 'react';
-import classes from './page.module.css';
-import ImagePicker from '@/components/Courses/ImagePicker';
+import { useActionState } from 'react';
 import { createACourse } from '@/lib/server-actions';
+import ImagePicker from '@/components/Courses/ImagePicker';
+import CourseCreateButton from '@/components/Courses/CourseCreateButton';
+import classes from './page.module.css';
 
 export default function CreateACoursePage() {
+    const [state, formAction] = useActionState(createACourse, {message: null});
 
     // const [title, setTitle] = useState('');
     // const [description, setDescription] = useState('');
@@ -24,7 +28,7 @@ export default function CreateACoursePage() {
             <p>Zkontroluj si prosím správnost veškerého textu v textovém editoru a přílušné kusy zkopíruj do přílušných políček. Následně zkontroluj, že vše je ve správném políčku. Až poté odešli. Kurz poté najdeš v nabídce kurzů.</p>
         </header>
         <main className={classes.main}>
-            <form className={classes.form} action={createACourse}>
+            <form className={classes.form} action={formAction}>
             <div className={classes.row}>
                 <p>
                     <label htmlFor="name">Jméno přednášejícího</label>
@@ -53,8 +57,9 @@ export default function CreateACoursePage() {
                     ></textarea>
             </p>
             <ImagePicker label="Your image" name="image"/>
+            {state.message && <p>{state.message}</p>}
             <p className={classes.actions}>
-                <button type="submit">Vytvořit kurz</button>
+                <CourseCreateButton />
             </p>
             </form>
         </main>
