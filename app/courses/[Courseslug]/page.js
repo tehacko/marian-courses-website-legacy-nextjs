@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { notFound } from 'next/navigation';
-import { getCourse } from '@/lib/Courses'
+import { getCourse } from '@/lib/db-interactions'
 import classes from './page.module.css'
 
 

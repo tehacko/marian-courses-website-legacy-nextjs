@@ -2,7 +2,7 @@ import Link from "next/link";
 import classes from "./page.module.css";
 import CoursesGrid from "@/components/Courses/CoursesGrid";
 
-import { getCourses } from '@/lib/Courses';
+import { getCourses } from '@/lib/db-interactions';
 import { Suspense } from "react";
 
 async function LoadingCourses() {
