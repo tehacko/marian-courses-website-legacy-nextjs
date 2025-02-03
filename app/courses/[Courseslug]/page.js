@@ -4,12 +4,15 @@ import { notFound } from 'next/navigation';
 import { getCourse } from '@/lib/db-interactions'
 import classes from './page.module.css'
 
-
 export default async function CourseDetailsPage( { params } ) {
-    const course = await getCourse(params.Courseslug);
-    
+    const { Courseslug } = await params;
+    const course = await getCourse(Courseslug);
+
+
+    // If the course is not found, show the not found page
     if (!course) {
         notFound();
+        return null; // Return null to stop further processing
     }
 
     course.course_description = course.course_description.replace(/\n/g, '<br />');
@@ -32,7 +35,6 @@ export default async function CourseDetailsPage( { params } ) {
                 <p className={classes.instructions} dangerouslySetInnerHTML={{
                     __html: course.course_description,
                 }}></p>
-                <h1>{params.slug} Page</h1>
             </main>
         </>
     );

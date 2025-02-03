@@ -1,9 +1,14 @@
+import { Suspense } from "react";
 import Link from "next/link";
+
 import classes from "./page.module.css";
 import CoursesGrid from "@/components/Courses/CoursesGrid";
-
 import { getCourses } from '@/lib/db-interactions';
-import { Suspense } from "react";
+
+export const metadata = {
+    title: 'All Courses',
+    description: 'Browse the magnificent courses offered'
+}
 
 async function LoadingCourses() {
     const courses = await getCourses();
