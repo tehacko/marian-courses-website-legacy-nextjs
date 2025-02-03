@@ -18,7 +18,8 @@ export default async function CourseDetailsPage( { params } ) {
         <>
             <header className={classes.header}>
                 <div className={classes.image}>
-                    <Image src={`https://marian-courses-bucket.s3.us-east-1.amazonaws.com/public/${course.image}`} alt={course.title} fill/>
+                    <Image src={'/' + `${course.image}`} alt={course.title} fill/>
+                {/* https://marian-courses-bucket.s3.us-east-1.amazonaws.com/public/ */}
                 </div>
                 <div className={classes.headerText}>
                     <h1>{course.title}</h1>

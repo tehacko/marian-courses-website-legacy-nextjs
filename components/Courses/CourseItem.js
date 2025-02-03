@@ -9,7 +9,8 @@ export default function CourseItem({ title, slug, image, summary, lecturer }) {
         <header>
           <div className={classes.image}>
             <Image
-              src={`https://marian-courses-bucket.s3.us-east-1.amazonaws.com/public/${image}`}
+              src={`/${image}`} 
+              // https://marian-courses-bucket.s3.us-east-1.amazonaws.com/public/
               alt={title}
               fill
             />
