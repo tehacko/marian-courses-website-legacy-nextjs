@@ -1,3 +1,3 @@
 export default function CoursesArchivePage() {
-    return <h1>ArFEQEFQEF</h1>;
+    return <h1>Archiv kurzů</h1>;
 }

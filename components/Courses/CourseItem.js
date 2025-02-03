@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import classes from './CourseItem.module.css';
 
-export default function CourseItem({ title, slug, image, summary, lecturer }) {
+export default function CourseItem({ date, title, slug, image, summary, lecturer }) {
     return (
       <article className={classes.course}>
         <header>
@@ -17,7 +17,8 @@ export default function CourseItem({ title, slug, image, summary, lecturer }) {
           </div>
           <div className={classes.headerText}>
             <h2>{title}</h2>
-            <p>by {lecturer}</p>
+            <p>Vedoucí: {lecturer}</p>
+            <p>Publikováno: {date}</p>
           </div>
         </header>
         <div className={classes.content}>

@@ -4,6 +4,7 @@ const db = sql('courses.db');
 const dummyCourses = [
    {
      title: "Jak digitalizovat a prodat ručně tvořené umění",
+     date: "2025-01-01",
      slug: 'veronika-semi1',
      image: 'veronika-vytvarna.png',
      summary:
@@ -29,6 +30,7 @@ const dummyCourses = [
    },
    {
      title: "Zdravý životní styl se Zoltánem",
+     date: "2024-31-12",
      slug: 'zoltan-webi1',
      image: 'zoltan-zdravozivotnestylovy.png',
      summary:
@@ -54,6 +56,7 @@ const dummyCourses = [
    },
    {
      title: "Vstříc duchovnímu, fyzickému i finančnímu zdraví s B-Bedřichem",
+     date: "2024-18-07",
      slug: 'bedrich-vide1',
      image: 'bedrich-businessosportovni.png',
      summary:
@@ -79,6 +82,7 @@ const dummyCourses = [
    },
    {
      title: 'Workshop líčení s novým revolučním nástrojem Make-U-Up',
+     date: "2025-20-01",
      slug: 'valerie-webi1',
      image: 'valerie-vynalezava.png',
      summary:
@@ -104,6 +108,7 @@ const dummyCourses = [
    },
    {
      title: 'Smart-Greenery: Software k údržbě a zalévání květin.',
+     date: "2024-25-03",
      slug: 'barbora-vide1',
      image: 'barbora-botanickozkoumava.png',
      summary:
@@ -129,6 +134,7 @@ const dummyCourses = [
    },
    {
      title: 'Umělecké projekty na univerzitách: Jak získat zakázky od designer firem',
+     date: "2025-01-02",
      slug: 'ursula-ursulova-audi1',
      image: 'ursula-umeleckovedecka.png',
      summary:
@@ -158,6 +164,7 @@ const dummyCourses = [
 db.prepare(`
    CREATE TABLE IF NOT EXISTS courses (
        id INTEGER PRIMARY KEY AUTOINCREMENT,
+       date TEXT NOT NULL,
        slug TEXT NOT NULL UNIQUE,
        title TEXT NOT NULL,
        image TEXT NOT NULL,
@@ -172,6 +179,7 @@ async function initData() {
   const stmt = db.prepare(`
       INSERT INTO courses VALUES (
          null,
+         @date,
          @slug,
          @title,
          @image,
