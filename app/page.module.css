@@ -6,6 +6,21 @@
   max-width: 75rem;
 }
 
+.highlight {
+  background: linear-gradient(90deg, #f9572a, #ff8a05);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.highlight.subheader {
+  display: flex;
+  flex-direction: column; /* Stack header and list */
+  align-items: center; /* Center align */
+  gap: 1rem; /* Space between header and year list */
+  text-align: center;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -194,4 +209,31 @@ a.secondary {
   .logo {
     filter: invert();
   }
+}
+
+.yearslist {
+  margin-top: 15rem;
+  list-style-type: none; /* Remove default bullets */
+  padding: 0;            /* Remove default padding */
+  margin: 0;             /* Remove default margin */
+  display: flex;            /* Use flexbox to line items horizontally */
+  font-size: 5rem;      
+
+}
+
+.yearslist li {
+  margin-right: 10px;    /* Add some space between items */
+  color: black;
+}
+
+.yearslist li a {
+  text-decoration: none; /* Remove underline from links */
+  color: #000;           /* Set link color */
+  padding: 5px 10px;     /* Add some padding around the links */
+  border: 1px solid #000; /* Add a border around the links */
+  border-radius: 4px;    /* Optional: Add rounded corners */
+}
+
+.yearslist li a:hover {
+  background-color: #f0f0f0; /* Change background on hover */
 }

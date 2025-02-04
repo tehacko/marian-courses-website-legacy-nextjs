@@ -18,6 +18,12 @@
   -webkit-text-fill-color: transparent;
 }
 
+.highlight.subheader {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
 .header p {
   margin: 0;
 }
