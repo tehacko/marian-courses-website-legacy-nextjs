@@ -1,3 +1,11 @@
+import CourseList from "@/components/Courses/CourseList";
+import { getLatestCourses } from "@/lib/db-interactions";
+
 export default function LatestCoursesPage() {
-    return <h1>Nejnovější kurzy</h1>;
+    const latestCourses = getLatestCourses();
+    return (
+        <>
+            <h1>Nejnovější kurzy</h1>;
+        </>
+    );
 }

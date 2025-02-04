@@ -14,8 +14,8 @@ export default function MainHeader() {
           <nav className={classes.nav}>
             <ClientNavLink href="/">Home</ClientNavLink>
             <ClientNavLink href="/about">O nás</ClientNavLink>
-            <ClientNavLink href="/courses">Kurzy</ClientNavLink>
-            <ClientNavLink href="/archive">Archiv kurzů</ClientNavLink>
+            <ClientNavLink href="/courses">Nejnovější Kurzy</ClientNavLink>
+            <ClientNavLink href="/archive">Všechny kurzy</ClientNavLink>
             <ClientNavLink href="/create-a-course">Vytvořit kurz</ClientNavLink>
             <ClientNavLink href="/login">Přihlášení</ClientNavLink>
             <ClientNavLink href="/register">Registrace</ClientNavLink>
