@@ -1,4 +1,4 @@
-import { getCourses } from "@/lib/db-interactions";
+import { getCourses } from "@/lib/db-content";
 import CourseList from "@/components/Courses/CourseList";
 import CoursesGrid from "@/components/Courses/CoursesGrid";
 import classes from "./page.module.css";

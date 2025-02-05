@@ -1,5 +1,5 @@
 import CourseList from "@/components/Courses/CourseList";
-import { getLatestCourses } from "@/lib/db-interactions";
+import { getLatestCourses } from "@/lib/db-content";
 import CoursesGrid from "@/components/Courses/CoursesGrid";
 import classes from '@/app/courses/page.module.css'
 

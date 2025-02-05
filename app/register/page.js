@@ -1,3 +1,9 @@
+import RegisterForm from "@/components/RegisterForm/RegisterForm";
+
+export default async function Register() {
+    return <RegisterForm />;
+}
+
 // import RegisterBox from '@/components/RegisterBox.js';
 
 // export default function Register() {

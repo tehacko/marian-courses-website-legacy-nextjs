@@ -1,6 +1,6 @@
 import Link from "next/link";
 import classes from '@/app/page.module.css'
-import { getAvailableCourseYears } from "@/lib/db-interactions";
+import { getAvailableCourseYears } from "@/lib/db-content";
 
 export default function YearHeader() {
     const courseYearLinks = getAvailableCourseYears();
