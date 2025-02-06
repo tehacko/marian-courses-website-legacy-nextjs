@@ -1,6 +1,6 @@
-import sql from 'better-sqlite3';
+const sql = require('better-sqlite3');
 
-const db = sql('training.db');
+const db = sql('authentications.db');
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
@@ -18,7 +18,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS sessions (
 )`);
 
 db.exec(`
-  CREATE TABLE IF NOT EXISTS trainings (
+  CREATE TABLE IF NOT EXISTS course_subscriptions (
     id INTEGER PRIMARY KEY,
     title TEXT,
     image TEXT,
@@ -26,21 +26,21 @@ db.exec(`
   );
 `);
 
-const hasTrainings =
-  db.prepare('SELECT COUNT(*) as count FROM trainings').get().count > 0;
+const hasSubscriptions =
+  db.prepare('SELECT COUNT(*) as count FROM course_subscriptions').get().count > 0;
 
-if (!hasTrainings) {
+if (!hasSubscriptions) {
   db.exec(`
-    INSERT INTO trainings (title, image, description)
+    INSERT INTO course_subscriptions (title, image, description)
     VALUES
-    ('Yoga', '/yoga.jpg', 'A gentle way to improve flexibility and balance.'),
-    ('Boxing', '/boxing.jpg', 'A high-energy workout that improves strength and speed.'),
-    ('Running', '/running.jpg', 'A great way to improve cardiovascular health and endurance.'),
-    ('Weightlifting', '/weightlifting.jpg', 'A strength-building workout that helps tone muscles.'),
-    ('Cycling', '/cycling.jpg', 'A low-impact workout that improves cardiovascular health and endurance.'),
-    ('Gaming', '/gaming.jpg', 'A fun way to improve hand-eye coordination and reflexes.'),
-    ('Sailing', '/sailing.jpg', 'A relaxing way to enjoy the outdoors and improve balance.');
+    ('Zoltán', '/zoltan-zdravozivotnestylovy.png', 'Představujeme nejnovější a nejefektivnější metodu zdravého stravování.'),
+    ('Veronika', '/veronika-vytvarna.png', 'Když máš talent, dej o sobě vědět!'),
+    ('Barbora', '/barbora-botanickozkoumava.png', 'Zjednodušte si údržbu zeleně v domácnosti a na zahradě automatizovaným nástrojem Smart-Greenery.'),
+    ('Bedřich', '/bedrich-businessosportovni.png', 'Získej rovnouváhu ducha, duše i těla.'),
+    ('Sára', '/jo-73.png', 'Dáme to.'),
+    ('Uršula', '/ursula-umeleckovedecka.png', 'Jak vyvolat a upevnit zájem designer firem k zadávání uměleckých zakázek u vás na univerzitě.'),
+    ('Valerie', '/valerie-vynalezava.png', 'Buďte mezi tisícemi žen, které využívají revoluční metody líčení s Make-U-Up.');
 `);
 }
 
-export default db;
+module.exports = db;
