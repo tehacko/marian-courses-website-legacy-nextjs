@@ -14,7 +14,7 @@ export default async function FilteredCoursesPage({params}) {
     const selectedMonth = filter?.[1];
     let courses;
     if (selectedYear && !selectedMonth) {
-        courses = getCoursesForYear(selectedYear);
+        courses = await getCoursesForYear(selectedYear);
     }
 
     let courseContent = <p>Vyberte rok.</p>
