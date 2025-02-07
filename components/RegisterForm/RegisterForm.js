@@ -1,37 +1,66 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { useActionState } from 'react';
-import { signup } from '@/lib/server-actions';
 
 export default function RegisterForm() {
-  const [formState, formAction] = useActionState(signup, {});
+  const [formState, setFormState] = useState({ errors: null, message: null });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const email = formData.get('email');
+    const password = formData.get('password');
+
+    const response = await fetch('http://localhost:5000/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      setFormState({ errors: data.error, message: null });
+    } else {
+      setFormState({ errors: null, message: data.message });
+      e.target.reset(); // Clear the form after success
+    }
+  };
+
   return (
-    <form id="auth-form" action={formAction}>
+    <form id="auth-form" onSubmit={handleSubmit}>
       <div>
         <img src="/images/auth-icon.jpg" alt="A lock icon" />
       </div>
+      
       <p>
         <label htmlFor="email">Email: </label>
-        <input type="email" name="email" id="email" />
+        <input type="email" name="email" id="email" required />
       </p>
+
       <p>
         <label htmlFor="password">Heslo: </label>
-        <input type="password" name="password" id="password" />
+        <input type="password" name="password" id="password" required />
       </p>
-      {formState.errors && (<ul id="form-errors">
-        {Object.keys(formState.errors).map((error) => (
-          <li key={error}>{formState.errors[error]}</li>
-          ))}
-        </ul>)}
+
+      {formState.errors && (
+        <p style={{ color: 'red' }}>{formState.errors}</p>
+      )}
+
+      {formState.message && (
+        <p style={{ color: 'green' }}>{formState.message}</p>
+      )}
+
       <p>
-        <button type="submit">
-          Vytvořit účet
-        </button>
+        <button type="submit">Vytvořit účet</button>
       </p>
+
       <p>
-        <Link href="/">Přihlásit se existujícím účtem.</Link>
+        <Link href="/my-courses">Přihlásit se existujícím účtem.</Link>
       </p>
     </form>
   );
 }
+

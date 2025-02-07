@@ -7,8 +7,11 @@ import passport from "passport";
 import pg from "pg";
 import session from "express-session";
 import { Strategy } from "passport-local";
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
+app.use(express.json()); // Add this line to parse JSON request bodies
 const port = 5000;
 const saltRounds = 10;
 env.config();
@@ -41,8 +44,6 @@ const db = new pg.Pool({
 });
 db.connect();
 
-let heading;
-
 app.use((req, res, next) => {
   res.locals.user = req.user || null; // Pass the user object or null if not authenticated
   res.locals.isAdmin = req.user?.isAdmin || false; // Add isAdmin for template use
@@ -70,18 +71,56 @@ app.get("/news", async (req, res) => {
   }
 });
 
-// app.get("/login", (req, res) => {
-//   res.render("login.ejs");
-// });
+app.post("/api/register", async (req, res) => {
+  const { email, password } = req.body;
 
-// // Make it work
-// app.get("/adminlogin", (req, res) => {
-//   res.render("adminlogin.ejs");
-// });
+  try {
+    const checkResult = await db.query(
+      "SELECT * FROM users WHERE email = $1", [email]
+    );
 
-// app.get("/register", (req, res) => {
-//   res.render("register.ejs");
-// });
+    if (checkResult.rows.length > 0) {
+      return res.status(400).json({ error: "Email already exists. Try logging in." });
+    }
+
+    bcrypt.hash(password, saltRounds, async (err, hash) => {
+      if (err) {
+        console.error("Error hashing password:", err);
+        return res.status(500).json({ error: "Internal server error." });
+      }
+
+      try {
+        const result = await db.query(
+          'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *',
+          [email, hash]
+        ); 
+        
+        const user = result.rows[0];
+
+        // Using req.login if you have session-based authentication
+        req.login(user, (err) => {
+          if (err) {
+            console.error("Login error:", err);
+            return res.status(500).json({ error: "Login failed, but registration successful." });
+          }
+
+          res.status(201).json({
+            message: "You have been successfully registered!",
+            user: { id: user.id, email: user.email } // Don't send password
+          });
+        });
+
+      } catch (insertError) {
+        console.error('Error inserting data:', insertError);
+        return res.status(500).json({ error: "Database insertion error." });
+      }
+    });
+
+  } catch (queryError) {
+    console.error('Database query error:', queryError);
+    return res.status(500).json({ error: "Internal server error." });
+  }  
+});
 
 // app.get("/logout", (req, res) => {
 //   req.logout(function (err) {
@@ -156,47 +195,7 @@ app.get("/news", async (req, res) => {
 //   })
 // );
 
-// app.post("/register", async (req, res) => {
-//   const desiredUsername = req.body.username;
-//   const desiredPassword = req.body.password;
 
-//   try {
-//     const checkResult = await db.query(
-//       "SELECT * FROM users WHERE username = $1", [
-//       desiredUsername,
-//     ]);
-
-//     if (checkResult.rows.length > 0) {
-//       res.send("Username already exists. Try logging in.");
-//     } else {
-//       bcrypt.hash(desiredPassword, saltRounds, async (err, hash) => {
-//         if (err) {
-//           console.error("Error hashing password:", err);
-//         } else {
-//           const result = await db.query(
-//             'INSERT INTO users (username, email, password, height, birthdate) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-//                 [desiredUsername,
-//                   req.body.email,
-//                   hash,
-//                   req.body.height,
-//                   req.body.birthdate
-//                 ]
-//               ); 
-//           const user = result.rows[0];
-//           heading = "You have been successfully registered!";
-//           req.login(user, (err) => {
-//             console.log(err);
-//             res.render("loggedinpage.ejs", {
-//               reportedUsername: user.username,
-//               confirmRegistration: heading});
-//           })
-//         };
-//       });
-//     }
-//   } catch (err) {
-//     console.error('Error inserting data:', err);
-//   }  
-// });
 
 // // PUT method here (replace user data)
 //   // 1. logic
