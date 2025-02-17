@@ -146,31 +146,13 @@ app.post("/api/login", (req, res, next) => {
   })(req, res, next);
 });
 
-// app.post(
-//   "/adminlogin",
-//   passport.authenticate("adminlocal", {
-//     successRedirect: "/adminloggedin",
-//     failureRedirect: "/adminlogin",
-//   })
-// );
+
 
 // app.get("/loggedinpage", (req, res) => {
 //   if (req.isAuthenticated()) {
 //     res.render("loggedinpage.ejs", {
 //       reportedUsername: req.user.username, 
 //       confirmRegistration: heading,         
-//     });
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
-
-// // Make it work
-// app.get("/adminloggedin", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.render("adminloggedin.ejs", {
-//       adminUsername: req.user.username, 
-//       confirmRegistration: heading,        
 //     });
 //   } else {
 //     res.redirect("/login");
@@ -202,8 +184,25 @@ app.post("/api/login", (req, res, next) => {
 //   }
 // });
 
+// app.post(
+//   "/adminlogin",
+//   passport.authenticate("adminlocal", {
+//     successRedirect: "/adminloggedin",
+//     failureRedirect: "/adminlogin",
+//   })
+// );
 
-
+// // Make it work
+// app.get("/adminloggedin", (req, res) => {
+//   if (req.isAuthenticated()) {
+//     res.render("adminloggedin.ejs", {
+//       adminUsername: req.user.username, 
+//       confirmRegistration: heading,        
+//     });
+//   } else {
+//     res.redirect("/login");
+//   }
+// });
 
 // app.get("/logout", (req, res) => {
 //   req.logout(function (err) {
