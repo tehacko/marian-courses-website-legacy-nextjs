@@ -58,7 +58,7 @@ export default function RegisterForm() {
       </p>
 
       <p>
-        <Link href="/my-courses">Přihlásit se existujícím účtem.</Link>
+        <Link href="/login">Přihlásit se existujícím účtem.</Link>
       </p>
     </form>
   );
