@@ -50,26 +50,26 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/news", async (req, res) => {
-  await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate delay
-  try {
-    const result = await db.query('SELECT * FROM courses');
+// app.get("/news", async (req, res) => {
+//   await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate delay
+//   try {
+//     const result = await db.query('SELECT * FROM courses');
     
-    // Format the date in the result to YYYY-MM-DD format
-    const courses = result.rows.map(course => {
-      // Ensure the 'date' is a string in the correct format
-      if (course.date instanceof Date) {
-        course.date = course.date.toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD' string
-      }
-      return course;
-    });
+//     // Format the date in the result to YYYY-MM-DD format
+//     const courses = result.rows.map(course => {
+//       // Ensure the 'date' is a string in the correct format
+//       if (course.date instanceof Date) {
+//         course.date = course.date.toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD' string
+//       }
+//       return course;
+//     });
 
-    return res.json(courses); // Return the formatted courses
-  } catch (error) {
-    console.error('Error fetching courses:', error);
-    throw error;
-  }
-});
+//     return res.json(courses); // Return the formatted courses
+//   } catch (error) {
+//     console.error('Error fetching courses:', error);
+//     throw error;
+//   }
+// });
 
 app.post("/api/register", async (req, res) => {
   const { email, password } = req.body;
@@ -179,13 +179,17 @@ app.post("/api/register", async (req, res) => {
 //   }
 // });
 
-// app.post(
-//   "/login",
-//   passport.authenticate("local", {
-//     successRedirect: "/loggedinpage",
-//     failureRedirect: "/login",
-//   })
-// );
+app.post("/api/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({ success: true, user });
+    });
+  })(req, res, next);
+});
 
 // app.post(
 //   "/adminlogin",
@@ -197,45 +201,45 @@ app.post("/api/register", async (req, res) => {
 
 
 
-// // PUT method here (replace user data)
+// // PUT method here (replace user data) - CHANGE PASSWORD
 //   // 1. logic
 //   // 2. alert box asking the user to rewrite data?
 
-// // DELETE method here
+// // DELETE method here - DELETE ACCOUNT
 // // 1. logic
 // // 2. alert box asking "Are you sure?"¨
 
-// passport.use(
-//   "local",
-//   new Strategy(async function verify(username, password, cb) {
-//   try {
-//     const checkUsername = await db.query("SELECT * FROM users WHERE username = $1", [
-//       username,
-//     ]);
-//     if (checkUsername.rows.length > 0) {
-//       const user = checkUsername.rows[0];
-//       const storedHashedPassword = user.password;
-//       bcrypt.compare(password, storedHashedPassword, (err, valid) => {
-//         if (err) {
-//           console.error("Error comparing passwords:", err);
-//           return cb(err);
-//         } else {
-//           if (valid) {
-//             return cb(null, user);
-//           } else {
-//             return cb(null, false);
-//           }
-//         }
-//       })
-//     // Database data insertion
-//     } else {
-//       return cb("User not found.");
-//     }
-//   } catch (err) {
-//     return cb(err);
-//   }  
-//   })
-// );
+passport.use(
+  "local",
+  new Strategy(async function verify(username, password, cb) {
+  try {
+    const checkUsername = await db.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+    if (checkUsername.rows.length > 0) {
+      const user = checkUsername.rows[0];
+      const storedHashedPassword = user.password;
+      bcrypt.compare(password, storedHashedPassword, (err, valid) => {
+        if (err) {
+          console.error("Error comparing passwords:", err);
+          return cb(err);
+        } else {
+          if (valid) {
+            return cb(null, user);
+          } else {
+            return cb(null, false);
+          }
+        }
+      })
+    // Database data insertion
+    } else {
+      return cb("User not found.");
+    }
+  } catch (err) {
+    return cb(err);
+  }  
+  })
+);
 
 // passport.use(
 //   "adminlocal",
