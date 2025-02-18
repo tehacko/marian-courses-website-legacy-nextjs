@@ -121,7 +121,6 @@ app.post("/api/register", async (req, res) => {
             user: { id: user.id, email: user.email } // Don't send password
           });
         });
-
       } catch (insertError) {
         console.error('Error inserting data:', insertError);
         return res.status(500).json({ error: "Database insertion error." });
@@ -146,25 +145,46 @@ app.post("/api/login", (req, res, next) => {
   })(req, res, next);
 });
 
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next(); // User is authenticated, proceed to the next middleware
+  }
+  res.status(401).json({ error: "Unauthorized" }); // If not, return an error
+}
 
+app.get("/api/my-courses", isAuthenticated, (req, res) => {
+  res.json({ message: "Welcome to My Courses!", user: req.user });
+});
 
-// app.get("/loggedinpage", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.render("loggedinpage.ejs", {
-//       reportedUsername: req.user.username, 
-//       confirmRegistration: heading,         
-//     });
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
+app.get("/auth/status", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ 
+      authenticated: true, 
+      email: req.user.email
+    });
+  } else {
+    res.json({ authenticated: false });
+  }
+});
 
-// app.get(
-//   "/auth/google",
-//   passport.authenticate("google", {
-//   scope: ["profile", "email"],
-//   })
-// );
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+  scope: ["profile", "email"],
+  })
+);
+
+// Google callback route - where Google redirects after authentication
+app.get(
+  "/auth/google/loggedinpage",
+  passport.authenticate("google", {
+    failureRedirect: "/login?error=google", // Handle failure
+  }),
+  (req, res) => {
+    // After successful Google login, redirect to the frontend with success=true
+    res.redirect("http://localhost:3000?success=true");
+  }
+);
 
 // app.get(
 //   "/auth/google/loggedinpage",
@@ -173,16 +193,6 @@ app.post("/api/login", (req, res, next) => {
 //     failureRedirect: "/login",
 //   })
 // );
-
-// app.get("/auth/status", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.json({ authenticated: true,
-//       username: req.user.username 
-//       });
-//   } else {
-//     res.json({ authenticated: false });
-//   }
-// });
 
 // app.post(
 //   "/adminlogin",
@@ -278,35 +288,35 @@ passport.use(
 //   })
 // );
 
-// passport.use(
-//   "google",
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:5000/auth/google/loggedinpage",
-//       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
-//     }, 
-//     async (accessToken, refreshToken, profile, cb) => {
-//       try {
-//         const result = await db.query("SELECT * FROM users WHERE email = $1", [
-//           profile.email,
-//         ]);
-//         if (result.rows.length === 0) {
-//           const newUser = await db.query(
-//             "INSERT INTO users (username, password) VALUES ($1, $2)",
-//             [profile.email, "google"]
-//           );
-//           return cb(null, newUser.rows[0]);
-//         } else {
-//           return cb(null, result.rows[0]);
-//         }
-//       } catch (err) {
-//         return cb(err);
-//       }
-//     }
-//   )
-// );
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:5000/auth/google/loggedinpage",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    }, 
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        const result = await db.query("SELECT * FROM users WHERE email = $1", [
+          profile.email,
+        ]);
+        if (result.rows.length === 0) {
+          const newUser = await db.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2)",
+            [profile.email, "google"]
+          );
+          return cb(null, newUser.rows[0]);
+        } else {
+          return cb(null, result.rows[0]);
+        }
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
 
 passport.serializeUser((user, cb) => {
   cb(null, user.id); // Only store user ID in session

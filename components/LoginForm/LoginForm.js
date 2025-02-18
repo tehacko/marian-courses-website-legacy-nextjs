@@ -1,13 +1,31 @@
 'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // ✅ Added for redirection
 
 
 export default function LoginForm({ children, onLoginPress }) {
   const [formState, setFormState] = useState({ errors: null, message: null });
+  const [googleError, setGoogleError] = useState(null); // ✅ State for Google login error
   const router = useRouter(); // ✅ Added for navigation
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'google') {
+      setGoogleError('Google login failed. Please try again.');
+    }
+  
+    // Check if we have a successful response
+    if (urlParams.get('success') === 'true') {
+      // Redirect after successful login (this could be stored in state or received from backend)
+      router.push("/my-courses");
+    }
+  }, []);
+
+  const handleGoogleLogin = () => {
+    // Redirect to Google's OAuth login page
+    window.location.href = "http://localhost:5000/auth/google";
+  };
   
   const handleLogin = async (e) => {
     e.preventDefault();  
@@ -57,7 +75,13 @@ export default function LoginForm({ children, onLoginPress }) {
       </p>
 
       <p>
-        <Link href="/login">Přihlásit se za pomocí Google.</Link>
+        {/* Added Google login button, redirects to backend auth route */}
+        <button 
+            type="button" 
+            onClick={handleGoogleLogin} // ✅ Trigger the Google login process
+          >
+            Registrovat / Přihlásit se přes Google
+          </button>
       </p>
     </form>
       </div>
