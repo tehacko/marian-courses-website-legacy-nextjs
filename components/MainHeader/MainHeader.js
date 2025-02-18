@@ -8,8 +8,12 @@ import MainHeaderBackground from "./MainHeaderBackground";
 import ClientNavLink from "./ClientNavLink";
 
 export default function MainHeader() {
-  const { isAdmin } = useAuth();
-  console.log('Render MainHeader:', isAdmin); // Add this line for debugging
+  const { isAdmin, authenticated, logout } = useAuth();
+  console.log('Render MainHeader:', isAdmin, authenticated); // Add this line for debugging
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <>
@@ -22,14 +26,24 @@ export default function MainHeader() {
             <ClientNavLink href="/about">O nás</ClientNavLink>
             <ClientNavLink href="/archive">Nejnovější kurzy & Archiv</ClientNavLink>
             <ClientNavLink href="/courses">Všechny kurzy</ClientNavLink>
-            <ClientNavLink href="/create-a-course">Vytvořit kurz</ClientNavLink>
-
             {isAdmin && (
-              <ClientNavLink href="/admin-dashboard">Admin Panel</ClientNavLink>
+              <>
+                <ClientNavLink href="/admin-dashboard">Admin Panel</ClientNavLink>
+                <ClientNavLink href="/create-a-course">Vytvořit kurz</ClientNavLink>
+              </>
             )}
 
-            <ClientNavLink href="/login">Přihlášení</ClientNavLink>
-            <ClientNavLink href="/register">Registrace</ClientNavLink>
+            {!authenticated && (
+              <>
+                <ClientNavLink href="/login">Přihlášení</ClientNavLink>
+                <ClientNavLink href="/register">Registrace</ClientNavLink>
+              </>
+            )}        
+
+            {authenticated && (
+              <button onClick={handleLogout}>Odhlásit se</button>
+            )}
+
           </nav>
         </div>
       </header>

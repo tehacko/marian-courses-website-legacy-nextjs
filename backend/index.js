@@ -10,24 +10,33 @@ import session from "express-session";
 import { Strategy } from "passport-local";
 import cors from 'cors';
 
+//Express config
 const app = express();
 
+//CORS config (to connect to a foreign frontend)
 app.use(cors({
   origin: "http://localhost:3000", // Allow frontend origin
   credentials: true // Allow cookies to be sent
 }));
 
-app.use(express.json()); // Add this line to parse JSON request bodies
+// Parse JSON request bodies config
+app.use(express.json()); 
 
-const port = 5000;
-
-const saltRounds = 10;
-
-env.config();
-
+//Body Parser config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+//User Authentication Status config
+app.use((req, res, next) => {
+  res.locals.user = req.user || null; // Pass the user object or null if not authenticated
+  res.locals.isAdmin = req.user?.isAdmin || false; // Add isAdmin for template use
+  next();
+});
+
+//ENV config
+env.config();
+
+//DB config
 const { Pool } = pg;
 const db = new pg.Pool({
   user: process.env.PG_USER,
@@ -38,12 +47,7 @@ const db = new pg.Pool({
 });
 db.connect();
 
-app.use((req, res, next) => {
-  res.locals.user = req.user || null; // Pass the user object or null if not authenticated
-  res.locals.isAdmin = req.user?.isAdmin || false; // Add isAdmin for template use
-  next();
-});
-
+//DB Session and Cookie Storage config
 const pgSessionStore = pgSession(session);
 
 app.use(session({
@@ -59,33 +63,14 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 0.1, httpOnly: true, secure: false }
 }));
 
+//Passport config 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.get("/news", async (req, res) => {
-//   await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate delay
-//   try {
-//     const result = await db.query('SELECT * FROM courses');
-    
-//     // Format the date in the result to YYYY-MM-DD format
-//     const courses = result.rows.map(course => {
-//       // Ensure the 'date' is a string in the correct format
-//       if (course.date instanceof Date) {
-//         course.date = course.date.toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD' string
-//       }
-//       return course;
-//     });
-
-//     return res.json(courses); // Return the formatted courses
-//   } catch (error) {
-//     console.error('Error fetching courses:', error);
-//     throw error;
-//   }
-// });
-
+// POST and GET APIs
 app.post("/api/register", async (req, res) => {
   const { email, password } = req.body;
-
+  const saltRounds = 10;
   try {
     const checkResult = await db.query(
       "SELECT * FROM users WHERE email = $1", [email]
@@ -145,16 +130,22 @@ app.post("/api/login", (req, res, next) => {
   })(req, res, next);
 });
 
+
+app.post("/api/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return res.status(500).json({ error: "Logout failed." });
+    }
+    res.status(200).json({ message: "Logged out successfully." });
+  });
+});
+
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next(); // User is authenticated, proceed to the next middleware
   }
   res.status(401).json({ error: "Unauthorized" }); // If not, return an error
 }
-
-app.get("/api/my-courses", isAuthenticated, (req, res) => {
-  res.json({ message: "Welcome to My Courses!", user: req.user });
-});
 
 app.get("/auth/status", (req, res) => {
   if (req.isAuthenticated()) {
@@ -190,39 +181,16 @@ function isAdmin(req, res, next) {
   res.status(403).json({ error: "Access denied" }); // 403 Forbidden
 }
 
-// Example: Protect an admin-only API route
+//Protect a logged-In user only API route
+app.get("/api/my-courses", isAuthenticated, (req, res) => {
+  res.json({ message: "Welcome to My Courses!", user: req.user });
+});
+
+// Protect an admin-only API route
 app.get("/api/admin-dashboard", isAdmin, (req, res) => {
   res.json({ message: "Welcome to the Admin Dashboard" });
 });
 
-// app.post(
-//   "/adminlogin",
-//   passport.authenticate("adminlocal", {
-//     successRedirect: "/adminloggedin",
-//     failureRedirect: "/adminlogin",
-//   })
-// );
-
-// // Make it work
-// app.get("/adminloggedin", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.render("adminloggedin.ejs", {
-//       adminUsername: req.user.username, 
-//       confirmRegistration: heading,        
-//     });
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
-
-// app.get("/logout", (req, res) => {
-//   req.logout(function (err) {
-//     if (err) {
-//       return next(err);
-//     }
-//     res.redirect("/");
-//   });
-// });
 
 // // PUT method here (replace user data) - CHANGE PASSWORD
 //   // 1. logic
@@ -256,39 +224,6 @@ passport.use(
     }
   })
 );
-
-
-// passport.use(
-//   "adminlocal",
-//   new Strategy(async function verify(admin_username, admin_password, cb) {
-//   try {
-//     const checkAdminUsername = await db.query("SELECT * FROM admins WHERE admin_username = $1", [
-//       admin_username,
-//     ]);
-//     if (checkAdminUsername.rows.length > 0) {
-//       const user = checkAdminUsername.rows[0];
-//       const storedHashedAdminPassword = user.admin_password;
-//       bcrypt.compare(admin_password, storedHashedAdminPassword, (err, valid) => {
-//         if (err) {
-//           console.error("Error comparing passwords:", err);
-//           return cb(err);
-//         } else {
-//           if (valid) {
-//             return cb(null, {user, isAdmin: true});
-//           } else {
-//             return cb(null, false);
-//           }
-//         }
-//       })
-//     // Database data insertion
-//     } else {
-//       return cb("Admin not found.");
-//     }
-//   } catch (err) {
-//     return cb(err);
-//   }  
-//   })
-// );
 
 passport.use(
   "google",
@@ -337,6 +272,29 @@ passport.deserializeUser(async (obj, cb) => {
   }
 });
 
+const port = 5000;
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// app.get("/news", async (req, res) => {
+//   await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate delay
+//   try {
+//     const result = await db.query('SELECT * FROM courses');
+    
+//     // Format the date in the result to YYYY-MM-DD format
+//     const courses = result.rows.map(course => {
+//       // Ensure the 'date' is a string in the correct format
+//       if (course.date instanceof Date) {
+//         course.date = course.date.toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD' string
+//       }
+//       return course;
+//     });
+
+//     return res.json(courses); // Return the formatted courses
+//   } catch (error) {
+//     console.error('Error fetching courses:', error);
+//     throw error;
+//   }
+// });
