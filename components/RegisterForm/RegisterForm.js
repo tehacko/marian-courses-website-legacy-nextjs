@@ -33,7 +33,7 @@ export default function RegisterForm() {
   return (
     <form id="auth-form" onSubmit={handleSubmit}>
       <div>
-        <img src="/images/auth-icon.jpg" alt="A lock icon" />
+        {/* <img src="/images/auth-icon.jpg" alt="A lock icon" /> */}
       </div>
       
       <p>

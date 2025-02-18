@@ -56,7 +56,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 4, httpOnly: true, secure: false }
+  cookie: { maxAge: 1000 * 60 * 0.1, httpOnly: true, secure: false }
 }));
 
 app.use(passport.initialize());
@@ -160,7 +160,8 @@ app.get("/auth/status", (req, res) => {
   if (req.isAuthenticated()) {
     res.json({ 
       authenticated: true, 
-      email: req.user.email
+      email: req.user.email,
+      isAdmin: req.user.is_admin // ✅ Send admin status
     });
   } else {
     res.json({ authenticated: false });
@@ -175,24 +176,24 @@ app.get(
 );
 
 // Google callback route - where Google redirects after authentication
-app.get(
-  "/auth/google/loggedinpage",
-  passport.authenticate("google", {
-    failureRedirect: "/login?error=google", // Handle failure
-  }),
-  (req, res) => {
-    // After successful Google login, redirect to the frontend with success=true
+app.get("/auth/google/loggedinpage", passport.authenticate("google", { failureRedirect: "/login?error=google" }), (req, res) => {
+  req.logIn(req.user, (err) => {
+    if (err) return res.redirect("http://localhost:3000?error=google");
     res.redirect("http://localhost:3000?success=true");
-  }
-);
+  });
+});
 
-// app.get(
-//   "/auth/google/loggedinpage",
-//   passport.authenticate("google", {
-//     successRedirect: "/loggedinpage",
-//     failureRedirect: "/login",
-//   })
-// );
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.is_admin) {
+    return next();
+  }
+  res.status(403).json({ error: "Access denied" }); // 403 Forbidden
+}
+
+// Example: Protect an admin-only API route
+app.get("/api/admin-dashboard", isAdmin, (req, res) => {
+  res.json({ message: "Welcome to the Admin Dashboard" });
+});
 
 // app.post(
 //   "/adminlogin",
@@ -233,7 +234,7 @@ app.get(
 
 passport.use(
   "local",
-  new Strategy({ usernameField: "email" }, async function verify(email, password, cb) {
+  new Strategy({ usernameField: "email" }, async (email, password, cb) => {
     try {
       const checkUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
@@ -246,7 +247,7 @@ passport.use(
 
       const valid = await bcrypt.compare(password, storedHashedPassword);
       if (valid) {
-        return cb(null, user);
+        return cb(null, user);  // 👈 User now includes is_admin
       } else {
         return cb(null, false, { message: "Invalid credentials" });
       }
@@ -255,6 +256,7 @@ passport.use(
     }
   })
 );
+
 
 // passport.use(
 //   "adminlocal",
@@ -319,14 +321,14 @@ passport.use(
 );
 
 passport.serializeUser((user, cb) => {
-  cb(null, user.id); // Only store user ID in session
+  cb(null, { id: user.id, is_admin: user.is_admin }); // Store both ID & is_admin
 });
 
-passport.deserializeUser(async (id, cb) => {
+passport.deserializeUser(async (obj, cb) => {
   try {
-    const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    const result = await db.query("SELECT * FROM users WHERE id = $1", [obj.id]);
     if (result.rows.length > 0) {
-      cb(null, result.rows[0]); // Fetch user from DB on each request
+      cb(null, result.rows[0]); // Fetch full user details
     } else {
       cb(null, false);
     }
