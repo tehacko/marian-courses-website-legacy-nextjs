@@ -4,12 +4,23 @@
 import ProtectedRoute from "@/components/Authentication/AuthRequired"
 import { useActionState } from 'react';
 import { createACourse } from '@/lib/server-actions';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import ImagePicker from '@/components/Courses/ImagePicker';
 import CourseCreateButton from '@/components/Courses/CourseCreateButton';
 import classes from './page.module.css';
 
 export default function CreateACoursePage() {
     const [state, formAction] = useActionState(createACourse, {message: null});
+    const router = useRouter();
+
+    // Redirect on successful course creation
+    useEffect(() => {
+        if (state.success) {
+        router.push("/courses");
+        }
+    }, [state.success, router]);
+
 
     // const [title, setTitle] = useState('');
     // const [description, setDescription] = useState('');

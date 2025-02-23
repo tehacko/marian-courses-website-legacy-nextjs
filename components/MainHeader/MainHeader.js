@@ -41,9 +41,11 @@ export default function MainHeader() {
             )}        
 
             {authenticated && (
-              <button onClick={handleLogout}>Odhlásit se</button>
+              <>
+                <ClientNavLink href="/my-courses">Moje kurzy</ClientNavLink>
+                <button onClick={handleLogout}>Odhlásit se</button>
+              </>
             )}
-
           </nav>
         </div>
       </header>
