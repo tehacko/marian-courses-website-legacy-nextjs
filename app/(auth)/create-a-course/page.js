@@ -1,6 +1,7 @@
 'use client';
 
 // import { useState } from 'react';
+import ProtectedRoute from "@/components/Authentication/AuthRequired"
 import { useActionState } from 'react';
 import { createACourse } from '@/lib/server-actions';
 import ImagePicker from '@/components/Courses/ImagePicker';
@@ -20,50 +21,52 @@ export default function CreateACoursePage() {
     // };
 
     return (
-      <>
-        <header className={classes.header}>
-            <h1>
-            Vytvoření <span className={classes.highlight}>nového kurzu</span>
-            </h1>
-            <p>Zkontroluj si prosím správnost veškerého textu v textovém editoru a přílušné kusy zkopíruj do přílušných políček. Následně zkontroluj, že vše je ve správném políčku. Až poté odešli. Kurz poté najdeš v nabídce kurzů.</p>
-        </header>
-        <main className={classes.main}>
-            <form className={classes.form} action={formAction}>
-            <div className={classes.row}>
-                <p>
-                    <label htmlFor="name">Jméno přednášejícího</label>
-                <input type="text" id="name" name="name" required />
-                </p>
-                <p>
-                <label htmlFor="email">Email přednášejícího</label>
-                <input type="email" id="email" name="email" required />
-                </p>
-            </div>
-            <p>
-                <label htmlFor="title">Název</label>
-                <input type="text" id="title" name="title" required />
-            </p>
-            <p>
-                <label htmlFor="summary">Abstrakt</label>
-                <input type="text" id="summary" name="summary" required />
-            </p>
-            <p>
-                <label htmlFor="course_description">Popis kurzu</label>
-                    <textarea
-                    id="course_description"
-                    name="course_description"
-                    rows="10"
-                    required
-                    ></textarea>
-            </p>
-            <ImagePicker label="Your image" name="image"/>
-            {state.message && <p>{state.message}</p>}
-            <p className={classes.actions}>
-                <CourseCreateButton />
-            </p>
-            </form>
-        </main>
-      </>
+        <ProtectedRoute requireAdmin={true}>
+            <>
+                <header className={classes.header}>
+                    <h1>
+                    Vytvoření <span className={classes.highlight}>nového kurzu</span>
+                    </h1>
+                    <p>Zkontroluj si prosím správnost veškerého textu v textovém editoru a přílušné kusy zkopíruj do přílušných políček. Následně zkontroluj, že vše je ve správném políčku. Až poté odešli. Kurz poté najdeš v nabídce kurzů.</p>
+                </header>
+                <main className={classes.main}>
+                    <form className={classes.form} action={formAction}>
+                    <div className={classes.row}>
+                        <p>
+                            <label htmlFor="name">Jméno přednášejícího</label>
+                        <input type="text" id="name" name="name" required />
+                        </p>
+                        <p>
+                        <label htmlFor="email">Email přednášejícího</label>
+                        <input type="email" id="email" name="email" required />
+                        </p>
+                    </div>
+                    <p>
+                        <label htmlFor="title">Název</label>
+                        <input type="text" id="title" name="title" required />
+                    </p>
+                    <p>
+                        <label htmlFor="summary">Abstrakt</label>
+                        <input type="text" id="summary" name="summary" required />
+                    </p>
+                    <p>
+                        <label htmlFor="course_description">Popis kurzu</label>
+                            <textarea
+                            id="course_description"
+                            name="course_description"
+                            rows="10"
+                            required
+                            ></textarea>
+                    </p>
+                    <ImagePicker label="Your image" name="image"/>
+                    {state.message && <p>{state.message}</p>}
+                    <p className={classes.actions}>
+                        <CourseCreateButton />
+                    </p>
+                    </form>
+                </main>
+            </>
+        </ProtectedRoute>
     );
 }
 
